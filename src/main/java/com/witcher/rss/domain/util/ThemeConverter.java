@@ -1,5 +1,6 @@
 package com.witcher.rss.domain.util;
 
+import com.witcher.rss.api.data.ThemeData;
 import com.witcher.rss.db.model.ThemeModel;
 import com.witcher.rss.domain.model.Theme;
 
@@ -34,6 +35,29 @@ public final class ThemeConverter {
     public static Collection<Theme> convertToListThemeDomain(Collection<ThemeModel> models) {
         return models.stream()
                 .map(ThemeConverter::convertToThemeDomain)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Преобразовать доменный объектов в DTO.
+     * @param theme доменный объект
+     * @return DTO
+     */
+    public static ThemeData convertToThemeDTO(Theme theme) {
+        return ThemeData.builder()
+                .id(theme.getId())
+                .title(theme.getTitle())
+                .build();
+    }
+
+    /**
+     * Преобразовать список доменных объектов в список DTO.
+     * @param themes список доменных объектов
+     * @return список DTO
+     */
+    public static Collection<ThemeData> convertToListThemeDTO(Collection<Theme> themes) {
+        return themes.stream()
+                .map(ThemeConverter::convertToThemeDTO)
                 .collect(Collectors.toList());
     }
 }

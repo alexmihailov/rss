@@ -1,5 +1,6 @@
 package com.witcher.rss.domain.util;
 
+import com.witcher.rss.api.data.NewsData;
 import com.witcher.rss.db.model.NewsModel;
 import com.witcher.rss.domain.model.News;
 
@@ -37,5 +38,28 @@ public final class NewsConverter {
         return models.stream()
                 .map(NewsConverter::convertToNewsDomain)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Преобразовать доменный объектов в DTO.
+     * @param news доменный объект
+     * @return DTO
+     */
+    public static NewsData convertToNewsDTO(News news) {
+        return NewsData.builder()
+                .id(news.getId())
+                .linkNews(news.getLinkNews())
+                .linkIcon(news.getLinkIcon())
+                .datePublication(news.getDatePublication())
+                .build();
+    }
+
+    /**
+     * Преобразовать список доменных объектов в список DTO.
+     * @param news список доменных объектов
+     * @return список DTO
+     */
+    public static Collection<NewsData> convertToListNewsDTO(Collection<News> news) {
+        return news.stream().map(NewsConverter::convertToNewsDTO).collect(Collectors.toList());
     }
 }
