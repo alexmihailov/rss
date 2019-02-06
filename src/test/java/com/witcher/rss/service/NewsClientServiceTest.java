@@ -34,6 +34,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.mockito.ArgumentMatchers.any;
+
 /**
  * @author Alex Mihailov {@literal <avmikhaylov@phoenixit.ru>}.
  */
@@ -109,7 +111,7 @@ public class NewsClientServiceTest {
                 Optional.of(userModel)
         );
 
-        Mockito.when(userRepository.save(userModel)).thenReturn(userModel);
+        Mockito.when(userRepository.save(any(UserModel.class))).thenReturn(userModel);
     }
 
     @Test
