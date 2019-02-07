@@ -28,11 +28,19 @@ public class ResultResponse<T> implements Serializable {
         this.data = data;
     }
 
+    public ResultResponse() {
+        this(null);
+    }
+
+
     @Getter
     public class Meta {
 
         private String message;
         private Status status;
+
+        public Meta() {
+        }
 
         public Meta(String message, Status status) {
             this.message = message;

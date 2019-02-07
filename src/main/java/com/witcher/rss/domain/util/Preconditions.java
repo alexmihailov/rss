@@ -5,14 +5,17 @@ import com.witcher.rss.api.data.ResultResponse;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import java.util.Objects;
+import java.util.function.Predicate;
+
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * @author Alex Mihailov {@literal <avmikhaylov@phoenixit.ru>}.
  */
-public final class WebExceptionsHelper {
+public final class Preconditions {
 
-    private WebExceptionsHelper() {
+    private Preconditions() {
     }
 
     /**
@@ -37,5 +40,38 @@ public final class WebExceptionsHelper {
     public static WebApplicationException webApplicationException(Response.Status httpStatus, String message) {
         ResultResponse<?> response = new ResultResponse<>(ResultResponse.Status.ERROR, message);
         return new WebApplicationException(message, Response.status(httpStatus).type(APPLICATION_JSON).entity(response).build());
+    }
+
+    /**
+     * Проверить условие, если условие ложно, то выкинуть исключение.
+     * @param data данные для проверки
+     * @param predicate предикат с условием
+     * @param message сообщение при ошибке
+     * @param <T> тип данных
+     */
+    public static <T> void check(T data, Predicate<T> predicate, String message) {
+        if (!predicate.test(data)) {
+            throw webApplicationException(Response.Status.BAD_REQUEST, message);
+        }
+    }
+
+    /**
+     * Проверить, что данные не null, если null то выкинуть исключение.
+     * @param data данные для проверки
+     * @param message сообщение при ошибке
+     * @param <T> тип данных
+     */
+    public static <T> void checkNotNull(T data, String message) {
+        check(data, Objects::nonNull, message);
+    }
+
+    /**
+     * Проверить, что строка не null и не пустая.
+     * @param data строка для проверки
+     * @param message сообщение при ошибке
+     */
+    public static void checkNotEmpty(String data, String message) {
+        checkNotNull(data, message);
+        check(data, s -> !s.isEmpty(), message);
     }
 }

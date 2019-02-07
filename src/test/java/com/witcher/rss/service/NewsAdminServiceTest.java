@@ -79,11 +79,8 @@ public class NewsAdminServiceTest {
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userModel));
         Mockito.when(userRepository.existsById(1L)).thenReturn(true);
 
-        final ThemeModel themeModel2 = new ThemeModel("test2");
-        themeModel.setId(2L);
-        Mockito.when(themeRepository.findAllById(Arrays.asList(1L, 2L)))
-                .thenReturn(Arrays.asList(themeModel, themeModel2));
-        Mockito.when(themeRepository.existsById(2L)).thenReturn(true);
+        Mockito.when(themeRepository.findAllById(Collections.singletonList(1L)))
+                .thenReturn(Collections.singletonList(themeModel));
     }
 
     @Test
@@ -174,13 +171,12 @@ public class NewsAdminServiceTest {
     @Test
     public void testUpdateThemesReferences() throws NewsNotFoundException, ThemeNotFoundException {
 
-        final List<Long> themeIds = Arrays.asList(1L, 2L);
+        final List<Long> themeIds = Collections.singletonList(1L);
 
         final List<Long> resultList = new ArrayList<>(newsAdminService.updateThemesReferences(1L, themeIds));
 
         Assert.assertNotNull(resultList);
-        Assert.assertEquals(themeIds.size(), 2);
+        Assert.assertEquals(themeIds.size(), 1);
         Assert.assertNotNull(themeIds.get(0));
-        Assert.assertNotNull(themeIds.get(1));
     }
 }
